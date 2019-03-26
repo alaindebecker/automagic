@@ -1,0 +1,80 @@
+package newradj.database;
+
+import java.sql.*;
+import java.util.*;
+
+
+public class DataDefinition extends Database{
+    
+    public DataDefinition(String database, String username, String password) throws SQLException{
+        super(database, username, password);
+
+    }
+
+    public DataDefinition(String database) throws SQLException{
+        super(database);    
+    }
+    
+    public void clear(){
+        // Redo until no foreign key pb
+        boolean empty = false;
+        while(!empty) try{
+            empty = true;
+            ResultSet tables = getMeta().getTables(null, null, "%", new String[]{"TABLE"});
+            while(tables.next()){
+                String s = "DROP TABLE "+tables.getString(3);
+                try{
+                    db.execute(s);
+                }catch(SQLException err){
+                    empty = false;
+                }
+                put(s);
+            }
+            tables.close();
+        }catch(SQLException err){
+            err.printStackTrace();
+        }        
+    }
+
+    public String createTable(String table){
+        if(!listTables().contains(table)) try{
+            db.execute("CREATE TABLE "+table+"(\n"
+                + "    pk_"+table+" INTEGER PRIMARY KEY\n"
+                + "  , scd_valid_from TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n"
+                + "  , scd_valid_upto "
+                        + "TIMESTAMP DEFAULT '2038-01-19'\n"
+                + ");\n");
+        }catch(SQLException err){
+            return "Impossible to create table "+table;
+        }
+        meta.put(table, null);
+        return "";
+    }
+
+    public String createColumn(String table, String column){
+        if(!listColumns(table).contains(column)) try{
+            db.execute("ALTER TABLE "+table+" ADD COLUMN "+column+" VARCHAR(50)");
+        }catch(SQLException err){
+            return "Cannot create "+table+"."+column;
+        }
+        meta.get(table).put(column, new HashMap<String, String>());
+        return "";
+    }
+    
+    //TODO: Non-standard syntax
+    public String setType(String table, String column, String type){
+        //put("ALTER TABLE "+table+" MODIFY "+column+" "+type);
+        try{
+            db.execute("ALTER TABLE "+table+" MODIFY "+column+" "+type);
+            meta.get(table).get(column).put("type", type);
+        }catch(SQLException err){
+            return "Impossible to change the type of "+table+"."+column+" to "+type;
+        }
+        return "";
+    }
+
+    public static void main(String[] args) throws SQLException {
+        DataDefinition db = new DataDefinition("test", "", "");
+        db.clear();
+    }
+}
