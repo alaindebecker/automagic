@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <style>
+            * {font-family: sans-serif; margin: 0; padding: 0; }
+            header { position: relative; padding: 1em; }
+            footer { position: fixed; bottom: 0; left: 0; right: 0; text-align: center; padding: .5em; }
+            nav { position: absolute; left: 0; width: 10em; height: 100%; }
+            main { position: absolute; left: 10em; }            
+
+            #user { position: absolute; top: 50%; right: 1em; transform: translate(0, -50%); padding: .5em; }
+            
+            nav summary { padding : .5em; }
+            nav details li { margin-left : 0em; padding-left : 2em; list-style-type: none; }
+            nav ul hr { height: .5em; border: none; }
+
+            #login{
+                display: none; /* Hidden by default */
+                position: fixed; /* Stay in place */
+                z-index: 1; /* Sit on top */
+                left: 0; top: 0; width: 100%; height: 100%;
+                overflow: auto; /* Enable scroll if needed */
+                background-color: rgb(0,0,0); /* Fallback color */
+                background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+                padding-top: 60px;
+            }
+            #login form{
+                background: white;
+                margin: 1em auto; 
+                border: 1px solid #darkgrey;
+                width: 33%; 
+            }
+            #login h2 { text-align: center; }
+            #login .container { padding: 2em; }
+            #login input[type=text], input[type=password] {
+                width: 100%;
+                padding: .3em .5em;
+                display: inline-block;
+                border: 1px solid #ccc;
+                box-sizing: border-box;
+            }
+            #login label {
+                font-weight: bold; }
+        </style>
+
+        <style>
+            header { background: lightgrey; }
+            footer { background: lightgrey; }
+
+            #user { border-radius: .5em; }
+            #user:hover { background: whitesmoke; }
+
+            nav { background: whitesmoke; }
+            nav li:hover { background: lightgrey; }
+            nav li li { background: whitesmoke; }
+        </style>
+        
+        <script>
+            function showEntity(entity){
+                document.getElementById('entity').innerHTML = entity;
+            }
+            function login(){
+                document.getElementById('login').style.display = 'block';
+            }
+            
+        </script>
+    </head>
+    <body>
+        <header>
+            <h1>Classic Models</h1>
+            <div id="user" onclick="login()"><i class="fa fa-user"></i> User</div>
+        </header>
+        <nav>
+            <details>
+                <summary>Classic Models</summary>
+                <ul>
+                    <li onclick="showEntity('offices')">Offices</li>
+                    <li onclick="showEntity('employees')">Employees</li>
+                    <li onclick="showEntity('customers')">Customers</li>
+                    <hr>
+                    <li onclick="showEntity('products')">Products</li>
+                    <hr>
+                    <li onclick="showEntity('orders')">Orders</li>
+                    <li onclick="showEntity('payments')">Payments</li>
+                </ul>
+            </details>
+            <details>
+                <summary>References</summary>
+                <ul>
+                    <li onclick="showEntity('territories')">Territory</li>
+                    <li onclick="showEntity('jobtitles')">Job Titles</li>
+                    <li onclick="showEntity('productlines')">Product lines</li>
+                </ul>                   
+            </details>
+            <details>
+                <summary>Administration</summary>
+                <ul>
+                    <li onclick="showEntity('user')">User</li>
+                    <li onclick="showEntity('roles')">Role</li>
+                    <li onclick="showEntity('help')">Help</li>
+                    <li onclick="showEntity('language')">Language</li>
+                </ul>                                       
+            </details>
+        </nav>
+        <main>
+            <h2 id="entity">Entity</h2>
+            main
+        </main>
+        <footer>
+            footer
+        </footer>
+        <div id="login" onclick="document.getElementById('login').style.display = 'none';">
+            <form>
+                <h2>Classic Models</h2>
+                <div class="container">
+                    <label>Username</label>
+                    <input type="text" placeholder="Enter Username" >
+                    <label>Password</label>
+                    <input type="password" placeholder="Enter Password" >
+
+                    <button type="submit">Login</button>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>
